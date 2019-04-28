@@ -2,7 +2,10 @@
 import numpy as np
 
 def initialize(w, K, M, V, doc_lens):
-    """Initializes values for collapsed gibbs sampler"""
+    """
+    Initializes values for collapsed Gibbs sampler.
+    Returns topics and count matrices N_1, N_2, and N_3.
+    """
     
     # Set initial z randomly
     z = {}
@@ -30,7 +33,10 @@ def initialize(w, K, M, V, doc_lens):
     return((z, N_1, N_2, N_3))
 
 def gibbs(w, K, M, V, doc_lens, alpha, beta, N_1, N_2, N_3, z, n_iter):
-    """Runs gibbs sampler to get estimated latent topics"""
+    """
+    Runs Gibbs sampler to get estimated latent topics.
+    Returns count matrices N_1 and N_2.
+    """
     
     for i in range(n_iter):
         for m in range(M):
@@ -50,7 +56,10 @@ def gibbs(w, K, M, V, doc_lens, alpha, beta, N_1, N_2, N_3, z, n_iter):
     return((N_1, N_2))
 
 def topic_dist(N_1, doc_lens, alpha, M, K):
-    """Calculates MC estimates for topic distributions using results from Gibbs sampler"""
+    """
+    Calculates MC estimates for topic distributions using results from Gibbs sampler.
+    Returns MxK matrix theta.
+    """
     
     theta = np.zeros((M, K))
     for m in range(M):
@@ -60,7 +69,10 @@ def topic_dist(N_1, doc_lens, alpha, M, K):
     return theta
 
 def word_dist(N_2, beta, V, K):
-    """Calculates MC estimates for word distributions using results from Gibbs sampler"""
+    """
+    Calculates MC estimates for word distributions using results from Gibbs sampler.
+    Returns KxV matrix phi.
+    """
     
     phi = np.zeros((K, V))
     for k in range(K):
@@ -70,7 +82,13 @@ def word_dist(N_2, beta, V, K):
     return phi
 
 def lda(bow, K, alpha = 1, beta = 1, n_iter = 1000):
-    """LDA implementation using collapsed Gibbs sampler"""
+    """
+    LDA implementation using collapsed Gibbs sampler.
+    bow is a MxV bag-of-words matrix.
+    alpha and beta are positive hyperparameters (either a signle value or list/array of length K).
+    n_iter is the number of iterations for the sampler.
+    Returns topic and word distributions.
+    """
     
     # Get corpus parameters
     M, V = bow.shape
@@ -105,7 +123,9 @@ def lda(bow, K, alpha = 1, beta = 1, n_iter = 1000):
     return((theta, phi))
 
 def group_docs(theta, K):
-    """Uses LDA results to give most dominant topics in each document"""
+    """
+    Uses LDA results to print most dominant topics in each document.
+    """
     
     maxs = np.argmax(theta, axis = 1)
     for k in range(K):
@@ -113,7 +133,7 @@ def group_docs(theta, K):
 
 
 def get_key_words(phi, n_words, words = None):
-    """Gets key words from each topic after LDA is performed"""
+    """Uses LDA results to print key words from each topic."""
     K = len(phi)
     for k in range(K):
         biggest_probs = sorted(phi[k, :], reverse = False)[:n_words]
