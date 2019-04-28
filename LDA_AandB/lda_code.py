@@ -87,10 +87,13 @@ def lda(bow, K, alpha = 1, beta = 1, n_iter = 1000):
     # Initialize values for Gibbs sampler   
     z, N_1, N_2, N_3 = initialize(w, K, M, V, doc_lens)
     
-    
+
     # Set symmetric hyperparameters
-    alpha = np.ones(K) * alpha
-    beta  = np.ones(V) * beta
+    if type(alpha) == int:
+        alpha = np.ones(K) * alpha
+        
+    if type(beta) == int:
+        beta  = np.ones(V) * beta
     
     # Run Gibbs sampler
     N_1, N_2 = gibbs(w, K, M, V, doc_lens, alpha, beta, N_1, N_2, N_3, z, n_iter)
@@ -107,3 +110,15 @@ def group_docs(theta, K):
     maxs = np.argmax(theta, axis = 1)
     for k in range(K):
         print("Documents labeled in group", k + 1, ":", np.where(maxs == k)[0])
+
+
+def get_key_words(phi, n_words, words = None):
+    """Gets key words from each topic after LDA is performed"""
+    K = len(phi)
+    for k in range(K):
+        biggest_probs = sorted(phi[k, :], reverse = False)[:n_words]
+        key_words = [i for i in range(len(phi[k, :])) if phi[k, i] in biggest_probs]
+        if words is not None:
+            print("Key words for topic", k + 1, ": ", [words[i] for i in key_words])
+        else:
+            print("Key words for topic", k + 1, ": ", key_words)

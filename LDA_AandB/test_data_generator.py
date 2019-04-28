@@ -102,7 +102,9 @@ def get_newsgroups(categories = None, n_articles = 10):
 
     vectorizer = CountVectorizer()
     vectorizer.fit(words)
+    wordbank = vectorizer.get_feature_names()
+    
     bow_sparse = vectorizer.transform(words)
     bow = np.array(csr_matrix.todense(bow_sparse))
     
-    return (bow, labels)
+    return (bow, labels, wordbank)
