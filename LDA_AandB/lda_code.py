@@ -55,7 +55,7 @@ def topic_dist(N_1, doc_lens, alpha, M, K):
     theta = np.zeros((M, K))
     for m in range(M):
         for k in range(K):
-            theta[m, k] = (N_1[m, k] + alpha[k])/(doc_lens[m] + sum(alpha))
+            theta[m, k] = (N_1[m, k] + alpha[k])/(sum(N_1[k, :]) + sum(alpha))
             
     return theta
 
