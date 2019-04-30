@@ -139,6 +139,6 @@ def get_key_words(phi, n_words, words = None):
         biggest_probs = sorted(phi[k, :], reverse = False)[:n_words]
         key_words = [i for i in range(len(phi[k, :])) if phi[k, i] in biggest_probs]
         if words is not None:
-            print("Key words for topic", k + 1, ": ", [words[i] for i in key_words])
+            print("Key words for topic", k + 1, ": ", [words[i] for i in key_words[:n_words])
         else:
-            print("Key words for topic", k + 1, ": ", key_words)
+            print("Key words for topic", k + 1, ": ", key_words[:n_words])
