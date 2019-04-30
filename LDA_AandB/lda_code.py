@@ -29,6 +29,38 @@ def initialize(w, K, M, V, doc_lens):
             
     return((z, N_1, N_2, N_3))
 
+def initialize_optimized(W, K, M, V, doc_lens):
+    """Initializes values for collapsed gibbs sampler"""
+    
+    # Set initial z randomly
+    max_len = np.max(doc_lens)
+    Z = np.zeros((M, max_len), dtype = 'int')
+    for m in range(M):
+        for n in range(doc_lens[m]):
+            Z[m,n] = get_multinom(np.ones(K)/K)
+    
+    # Create count matrices
+    N_1 = np.zeros((M, K))
+    for m in range(M):
+        for k in range(K):
+            N_1[m, k] = np.sum(np.array(Z[m,:]) == k)
+            
+    N_2 = np.zeros((K, V))
+    for m in range(M):
+        for n in range(doc_lens[m]):
+            WordTopic = Z[m,n]
+            TopicWord = W[m,n]
+            N_2[WordTopic, TopicWord] += 1
+            
+    N_3 = np.zeros(K)
+    for m in range(M):
+        for n in range(doc_lens[m]):
+            WordTopic = Z[m,n]
+            N_3[Z[m,n]] += 1
+            
+    return((Z, N_1, N_2, N_3))
+
+
 def gibbs(w, K, M, V, doc_lens, alpha, beta, N_1, N_2, N_3, z, n_iter):
     """Runs gibbs sampler to get estimated latent topics"""
     

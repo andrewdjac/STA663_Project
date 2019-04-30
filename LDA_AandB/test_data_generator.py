@@ -35,6 +35,28 @@ def generate_words(phi, theta, M, N_min, N_max):
     
     return w
 
+## Brian's addition:
+def generate_matrices(w, z):
+    """Converts word and topic dictionaries into matrices for optimized functions"""
+    # Creating Word Matrix
+    MaxLen = max([len(w[i]) for i in w.keys()])
+
+    W = np.zeros((len(w.keys()), MaxLen), dtype = int)
+
+    for i in range(len(w.keys())):
+        W[i, 0:len(w[i])] = w[i]
+        
+    # Creating Topic Matrix
+    MaxLen = max([len(z[i]) for i in z.keys()])
+
+    Z = np.zeros((len(z.keys()), MaxLen), dtype = int)
+
+    for i in range(len(z.keys())):
+        Z[i, 0:len(z[i])] = z[i]
+    Z_prev = Z
+    
+    return W, Z
+
 
 def make_bow(w, M, V):
     """Creates bag-of-words matrix from corpus"""
