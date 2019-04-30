@@ -35,7 +35,13 @@ def initialize(W, K, M, V, doc_lens):
     return((Z, N_1, N_2, N_3))
 
 def lda_optimized(bow, K, alpha = 1, beta = 1, n_iter = 1000):
-    """LDA implementation using collapsed Gibbs sampler"""
+    """
+    LDA implementation using collapsed Gibbs sampler.
+    bow is a MxV bag-of-words matrix.
+    alpha and beta are positive hyperparameters (either a signle value or list/array of length K).
+    n_iter is the number of iterations for the sampler.
+    Returns topic and word distributions.
+    """
     
     # Get corpus parameters
     M, V = bow.shape
