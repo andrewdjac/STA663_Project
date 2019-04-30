@@ -1,7 +1,7 @@
 # Load libraries
 import numpy as np
-from lda_optimized import Full_Gibbs, get_multinom
-from lda_code import topic_dist, word_dist
+from LDA_AandB.lda_optimized_code import Full_Gibbs, get_multinom
+from LDA_AandB.lda_code import topic_dist, word_dist
 
 def initialize(W, K, M, V, doc_lens):
     """Initializes values for collapsed gibbs sampler"""
@@ -66,6 +66,6 @@ def lda_optimized(bow, K, alpha = 1, beta = 1, n_iter = 1000):
     
     
     # Estimate topic and word distributions
-    theta = topic_dist(N_1, doc_lens, alpha, M, K)
-    phi   = word_dist(N_2, beta, V, K)
+    theta = topic_dist(A, doc_lens, alpha, M, K)
+    phi   = word_dist(B, beta, V, K)
     return((theta, phi))
