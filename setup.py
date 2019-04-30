@@ -8,7 +8,7 @@ setup(
     # Needed to actually package something
     packages = ['LDA_AandB'],
     # Needed for dependencies
-    install_requires = ['numpy'],
+    install_requires = ['numpy', 'sklearn', 'scipy', 'numba'],
     # *strongly* suggested for sharing
     version = '0.1',
     # The license can be anything you like
