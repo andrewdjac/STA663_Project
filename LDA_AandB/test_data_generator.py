@@ -5,7 +5,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from scipy.sparse import csr_matrix
 
 def generate_dists(alpha, beta, M, K, V):
-    """Generates topic and word distributions"""
+    """
+    Generates topic and word distributions.
+    alpha and beta are hyperparameters of length K.
+    Returns MxK matrix theta and KxV matrix phi.
+    """
     
     # Generate word distributions
     phi = np.zeros((K, V))
@@ -21,7 +25,10 @@ def generate_dists(alpha, beta, M, K, V):
 
 
 def generate_words(phi, theta, M, N_min, N_max):
-    """Generates 'words' for corpus"""
+    """
+    Generates 'words' for corpus.
+    Return word dictionary w.
+    """
     
     doc_lens = np.random.randint(N_min, N_max, M)
     z = {}
@@ -37,7 +44,7 @@ def generate_words(phi, theta, M, N_min, N_max):
 
 
 def make_bow(w, M, V):
-    """Creates bag-of-words matrix from corpus"""
+    """Creates bag-of-words matrix from corpus."""
     
     bow = np.zeros((M, V))
     for m in range(M):
@@ -48,7 +55,11 @@ def make_bow(w, M, V):
 
 
 def simulate_corpus(alpha, beta, M, N_min, N_max):
-    """Generates test data for LDA"""
+    """Generates test data for LDA.
+    Returns MxV bag-of-words matrix bow, 
+    MxK topic distribution matrix theta, 
+    and KxV word distribution matrix phi. 
+    """
     
     # Get corpus parameters
     K = len(alpha)
@@ -88,7 +99,11 @@ newsgroups_categories = ['alt.atheism',
  'talk.religion.misc']
 
 def get_newsgroups(categories = None, n_articles = 10):
-    """Fetches random newsgroups articles of specified categories"""
+    """
+    Fetches random newsgroups articles of specified categories.
+    categories is a list of valid categories in Newsgroups.
+    n_articles is the number of articles to extract.
+    """
     
     remove = ('headers', 'footers', 'quotes')
     newsgroups = fetch_20newsgroups(subset = 'train', remove = remove, categories = categories)
@@ -102,7 +117,9 @@ def get_newsgroups(categories = None, n_articles = 10):
 
     vectorizer = CountVectorizer()
     vectorizer.fit(words)
+    wordbank = vectorizer.get_feature_names()
+    
     bow_sparse = vectorizer.transform(words)
     bow = np.array(csr_matrix.todense(bow_sparse))
     
-    return (bow, labels)
+    return (bow, labels, wordbank)
